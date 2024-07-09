@@ -4,6 +4,8 @@ const app = express();
 const user_routes = require('./routes/user.routes');
 const product_routes = require('./routes/product.routes');
 
+// Middelewares
+// poder interpretar los datos que vienen en el body
 app.use(express.json());
 
 app.use("/api",[

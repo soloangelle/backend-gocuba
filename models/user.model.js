@@ -14,13 +14,22 @@ const userSchema = new Schema({
         required: true, 
         unique:true, 
         minlength: 5, 
-        maxlength: 100 
+        maxlength: 100,
+        trim: true,
+        validate:{
+            validator:(value)=>{
+                const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+                return regex.test(value);
+            }
+        } 
     },
     password: { 
         type: String, 
         required: true, 
         minlength: 4, 
-        maxlength: 100 
+        maxlength: 100,
+        trim: true 
     },
     bornDate: { 
         type: Number, 
