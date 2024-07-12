@@ -35,12 +35,34 @@ async function getUserById(req, res) {
 async function getUsers(req, res) {
 
   try {
-       const users = await User.find().select({password: 0, __v: 0});
+    console.log(req.query);
+       const limiteUsuarios = req.query.limit || 2;
+       const page = req.query.page || 0;
+
+       const [users, total] = await Promise.all([
+          User.find()
+                    .select({password: 0, __v: 0})
+                    .collation({locale: 'es'})
+                    .sort({fullname: 'asc'})
+                    .limit(limiteUsuarios)
+                    .skip(page * limiteUsuarios),
+          User.countDocuments()
+       ])
+
+      //  const users = await User.find()
+      //                          .select({password: 0, __v: 0})
+      //                          .collation({locale: 'es'})
+      //                          .sort({fullname: 'asc'})
+      //                          .limit(limiteUsuarios)
+      //                          .skip(page * limiteUsuarios);
+
+      //  const totalUsers = await User.countDocuments();                        
 
        res.status(200).send({
           ok: true,
           message: 'Usuarios obtenidos correctamente',
-          users
+          users,
+          total
        });
     
   } catch (error) {
@@ -219,7 +241,7 @@ async function loginUser(req,res){
     user.password = undefined; //Borrar la contraseña del usuario antes de devolverlo
 
     //Si todo está correcto, Generar un token de autenticación
-    const token = jwt.sign({user}, secret, {expiresIn: 60});
+    const token = jwt.sign({user}, secret, {expiresIn: '1h'});
     
     
     // Si todo esta Ok, hacemos  devolvemmos una respuesta favorable      
