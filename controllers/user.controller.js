@@ -47,16 +47,7 @@ async function getUsers(req, res) {
                     .limit(limiteUsuarios)
                     .skip(page * limiteUsuarios),
           User.countDocuments()
-       ])
-
-      //  const users = await User.find()
-      //                          .select({password: 0, __v: 0})
-      //                          .collation({locale: 'es'})
-      //                          .sort({fullname: 'asc'})
-      //                          .limit(limiteUsuarios)
-      //                          .skip(page * limiteUsuarios);
-
-      //  const totalUsers = await User.countDocuments();                        
+       ]);                      
 
        res.status(200).send({
           ok: true,
@@ -96,17 +87,12 @@ async function postUser(req, res) {
       // Borrar la propiedad password antes de responder al cliente con los datos del nuevo suario
       newUser.password = undefined;
 
-
       res.status(201).send(newUser)
 
   } catch (error) {
        res.status(500).send("Error al crear usuario");
        console.log(error)
-  }
-  
- 
-
- 
+  } 
 }
 
 async function deleteUser(req,res){
@@ -164,9 +150,9 @@ async function putUser(req,res){
     const user = req.body;
 
     //TODO: Hashear la contraseña antes de actualizarla
-    if(req.body.password){
+    // if(req.body.password){
 
-    }
+    // }
 
      // TODO: Resetear Role si el usuario no es admin
     

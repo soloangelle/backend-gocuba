@@ -1,4 +1,3 @@
-const e = require('express');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -18,7 +17,7 @@ const userSchema = new Schema({
         trim: true,
         validate:{
             validator:(value)=>{
-                const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+                const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
                 return regex.test(value);
             }
