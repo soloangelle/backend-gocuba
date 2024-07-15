@@ -5,6 +5,7 @@ const productController = require('../controllers/product.controller');
 const auth = require('../middlewares/auth');
 const isAdmin = require('../middlewares/isAdmin');
 const isProvider = require('../middlewares/isProvider');
+const upload = require('../middlewares/upload');
 
 
 // GET products
@@ -14,9 +15,10 @@ router.get('/products', productController.getProducts);
 router.get('/products/:id', productController.getProductById);
 
 // - Rutas que solo puede usar o consumir un usuario autenticado
-
+// TODO: ACTIVAR de nuevo
+// auth, isAdmin,isProvider,
 // POST product 
-router.post('/products', auth, isAdmin,isProvider, productController.postProduct);
+router.post('/products', [upload], productController.postProduct);
 
 // DELETE product by id
 router.delete('/products/:id',[auth, isAdmin], productController.deleteProduct);

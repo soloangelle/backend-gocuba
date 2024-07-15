@@ -50,7 +50,13 @@ async function getProductById(req, res) {
 // Crear un nuevo producto
 async function postProduct(req, res) {
     try {
+
+        
         const product = new Product(req.body);
+
+        if(req.file?.filename){
+            product.image = req.file.filename;
+        }
 
         const newProduct = await product.save();
 

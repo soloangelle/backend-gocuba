@@ -54,7 +54,7 @@ const productSchema = new Schema({
         default: Date.now
     },
     category: {
-        type: String,        
+        type: Schema.Types.ObjectId,        
         required: true,
         index: true
     },    
