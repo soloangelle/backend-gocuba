@@ -18,7 +18,7 @@ router.get('/products/:id', productController.getProductById);
 // TODO: ACTIVAR de nuevo
 // auth, isAdmin,isProvider,
 // POST product 
-router.post('/products', [upload], productController.postProduct);
+router.post('/products',auth, isAdmin, upload, productController.postProduct);
 
 // DELETE product by id
 router.delete('/products/:id',[auth, isAdmin], productController.deleteProduct);

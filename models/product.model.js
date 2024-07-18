@@ -12,11 +12,6 @@ const productSchema = new Schema({
         index: true,
         uppercase: true
     },  
-    type: {
-        type: String, 
-        default: 'ACCOMMODATION', 
-        enum: ['ACCOMMODATION', 'TOUR', 'TRANSPORT']
-    },  
     price: {
         type: Number,
         required: true,
@@ -53,10 +48,11 @@ const productSchema = new Schema({
         type: Number,
         default: Date.now
     },
-    category: {
+    type: {
         type: Schema.Types.ObjectId,        
         required: true,
-        index: true
+        index: true,
+        ref: 'Type'
     },    
 });
 

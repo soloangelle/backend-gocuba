@@ -3,7 +3,7 @@ const Product = require('../models/product.model');
 
 async function getProducts(req, res) {
    try {
-        const products = await Product.find()
+        const products = await Product.find().populate('type', 'name');
         res.status(200).send({
             ok: true,
             message: 'Productos obtenidos correctamente',
@@ -23,7 +23,7 @@ async function getProductById(req, res) {
     try {
         const id = req.params.id;
 
-        const product = await Product.findById(id).select({__v: 0});
+        const product = await Product.findById(id).populate('type', 'name')
 
         if(!product){
             return res.status(404).send({
