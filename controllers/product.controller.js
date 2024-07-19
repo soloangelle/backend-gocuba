@@ -3,7 +3,8 @@ const Product = require('../models/product.model');
 
 async function getProducts(req, res) {
    try {
-        const products = await Product.find().populate('type', 'name');
+        const products = await Product.find().populate('type', 'name')
+                                            .populate('location', 'name')
         res.status(200).send({
             ok: true,
             message: 'Productos obtenidos correctamente',
@@ -56,6 +57,9 @@ async function postProduct(req, res) {
 
         if(req.file?.filename){
             product.image = req.file.filename;
+        }
+        if(req.file?.filename){
+            product.imageFront = req.file.filename;
         }
 
         const newProduct = await product.save();

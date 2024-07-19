@@ -23,7 +23,7 @@ const productSchema = new Schema({
         required: true,
         trim: true,
         minlength: 0,
-        maxlength: 500
+        maxlength: 600
     },
     description: {
         type: String,
@@ -36,9 +36,23 @@ const productSchema = new Schema({
         type: String,
         required: false
     },
-    cratedAt: {
+    imageFront:{
+        type: String,
+        required: false
+    },    
+    createdAt: {
         type: Number,
         default: Date.now
+    },
+    location: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        index: true,
+        ref: 'Location'
+    },
+    properties: {
+        type: Array,
+        required: false
     },
     active: {
         type: Boolean,

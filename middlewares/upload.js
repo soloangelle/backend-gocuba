@@ -3,7 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 const storage = multer.diskStorage({
-    destination: 'public/images',
+    destination: 'public/images/products',
     filename: (req,file,cb) => {
 
         console.log(file);
