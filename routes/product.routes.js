@@ -4,9 +4,10 @@ const productController = require('../controllers/product.controller');
 //Middleware para controlar acciones de los usuarios
 const auth = require('../middlewares/auth');
 const isAdmin = require('../middlewares/isAdmin');
-const isProvider = require('../middlewares/isProvider');
+const isAdminOrProvider = require('../middlewares/isAdminOrProvider');
 const upload = require('../middlewares/upload');
 
+// - Rutas que puede consumir cualquier usuario
 
 // GET products
 router.get('/products', productController.getProducts);
@@ -18,13 +19,13 @@ router.get('/products/:id', productController.getProductById);
 // TODO: ACTIVAR de nuevo
 // auth, isAdmin,isProvider,
 // POST product 
-router.post('/products',auth, isAdmin, upload, productController.postProduct);
+router.post('/products',auth, isAdminOrProvider, upload, productController.postProduct);
 
 // DELETE product by id
 router.delete('/products/:id',[auth, isAdmin], productController.deleteProduct);
 
 // PUT product by id
-router.put('/products/:id', auth, isAdmin,isProvider, productController.putProduct);
+router.put('/products/:id',[auth, isAdminOrProvider, upload], productController.putProduct);
 
 
 

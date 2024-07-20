@@ -2,7 +2,7 @@
 const Product = require('../models/product.model');
 
 async function getProducts(req, res) {
-   try {
+   try {           
         const products = await Product.find().populate('type', 'name')
                                             .populate('location', 'name')
         res.status(200).send({
@@ -113,7 +113,22 @@ async function putProduct(req, res) {
         const id = req.params.id;
         const data = req.body;
 
+        console.log(req.file);
+        
+        if(req.file?.filename){
+            data.image = req.file.filename;
+        } else {
+            delete data.image;
+        }
+
+        if(req.file?.filename){
+            data.imageFront = req.file.filename;
+        } else {
+            delete data.imageFront;
+        }
+
         data.updatedAt = Date.now();
+
         const product = await Product.findByIdAndUpdate(id, data, { new: true });
 
         if(!product){
@@ -128,7 +143,6 @@ async function putProduct(req, res) {
             message: 'Producto actualizado correctamente',
             product
         });
-
 
     } catch (error) {
         console.log(error);
