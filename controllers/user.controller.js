@@ -227,7 +227,7 @@ async function loginUser(req,res){
     user.password = undefined; //Borrar la contraseña del usuario antes de devolverlo
 
     //Si todo está correcto, Generar un token de autenticación
-    const token = jwt.sign({user}, secret, {expiresIn: '3h'});
+    const token = jwt.sign({user}, secret, {expiresIn: '5h'});
     
     
     // Si todo esta Ok, hacemos  devolvemmos una respuesta favorable      

@@ -1,30 +1,55 @@
 
 const Product = require('../models/product.model');
+const Type = require('../models/type.model');
 
 async function getProducts(req, res) {
-   try {           
-        const products = await Product.find().populate('type', 'name')
-                                            .populate('location', 'name')
+    try { 
+        const page = parseInt(req.query.page) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+
+        const filter = {};
+
+        if (req.query.type) {
+            const type = await Type.findOne({ name: req.query.type });
+            if (!type) {
+                return res.status(404).send({
+                    ok: false,
+                    message: 'Tipo de producto no encontrado'
+                });
+            }
+            filter.type = type._id;
+        }
+
+        const products = await Product.find(filter)
+                                      .populate('type', 'description')
+                                      .populate('location', 'name')
+                                      .skip(page * limit)
+                                      .limit(limit);
+
+        const total = await Product.countDocuments(filter);
+
         res.status(200).send({
             ok: true,
             message: 'Productos obtenidos correctamente',
-            products
+            products,
+            total
         });
-   } catch (error) {
-        console.log(error);
+    } catch (error) {
+        console.error(error);
         res.status(500).send({
-              ok: false,
-              message: 'Error al obtener los productos'
+            ok: false,
+            message: 'Error al obtener los productos'
         });
-    
-   }
+    }
 }
+
 
 async function getProductById(req, res) {
     try {
         const id = req.params.id;
 
         const product = await Product.findById(id).populate('type', 'name')
+                                                  .populate('location', 'name');
 
         if(!product){
             return res.status(404).send({
@@ -86,6 +111,8 @@ async function deleteProduct(req, res) {
         const id = req.params.id;
 
         const deleteProduct = await Product.findByIdAndDelete(id);
+        
+        
 
         if(!deleteProduct){
             return res.status(404).send({
@@ -93,7 +120,7 @@ async function deleteProduct(req, res) {
                 message: 'Producto no encontrado'
             });
         }
-
+        console.log(deleteProduct);
         res.status(200).send({
             ok: true,
             message: 'Producto eliminado correctamente'
@@ -114,7 +141,7 @@ async function putProduct(req, res) {
         const data = req.body;
 
         console.log(req.file);
-        
+
         if(req.file?.filename){
             data.image = req.file.filename;
         } else {
