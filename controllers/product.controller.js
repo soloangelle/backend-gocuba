@@ -1,4 +1,3 @@
-
 const Product = require('../models/product.model');
 const Type = require('../models/type.model');
 
@@ -6,8 +5,10 @@ async function getProducts(req, res) {
     try { 
         const page = parseInt(req.query.page) || 0;
         const limit = parseInt(req.query.limit) || 9;
-
-        const filter = {};
+        const minPrice = req.query.minPrice || 0;
+        const maxPrice = req.query.maxPrice || 300;
+    
+        const filter = {};  //Antes era con {}
 
         if (req.query.type) {
             const type = await Type.findOne({ name: req.query.type });
@@ -19,6 +20,12 @@ async function getProducts(req, res) {
             }
             filter.type = type._id;
         }
+
+        if (req.query.location) {
+            filter.location = req.query.location;
+        }
+
+        filter.price = { $gte: minPrice, $lte: maxPrice };
 
         const products = await Product.find(filter)
                                       .populate('type', 'description')
@@ -42,7 +49,6 @@ async function getProducts(req, res) {
         });
     }
 }
-
 
 async function getProductById(req, res) {
     try {
@@ -77,7 +83,6 @@ async function getProductById(req, res) {
 async function postProduct(req, res) {
     try {
 
-        
         const product = new Product(req.body);
 
         if(req.file?.filename){

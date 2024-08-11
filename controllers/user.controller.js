@@ -150,12 +150,13 @@ async function putUser(req,res){
     const user = req.body;
 
     //TODO: Hashear la contraseña antes de actualizarla
-    // if(req.body.password){
+    user.password = undefined;
+    // TODO: Resetear Role si el usuario no es admin
+    if(req.user.role !== 'ADMIN_ROLE'){
+      user.role = undefined;
+    }
 
-    // }
 
-     // TODO: Resetear Role si el usuario no es admin
-    
     //Actualizamos el usuario
     const updateUser = await User.findByIdAndUpdate(id, user, {new: true});
 
@@ -227,7 +228,7 @@ async function loginUser(req,res){
     user.password = undefined; //Borrar la contraseña del usuario antes de devolverlo
 
     //Si todo está correcto, Generar un token de autenticación
-    const token = jwt.sign({user}, secret, {expiresIn: '5h'});
+    const token = jwt.sign({user}, secret, {expiresIn: '1h'});
     
     
     // Si todo esta Ok, hacemos  devolvemmos una respuesta favorable      
