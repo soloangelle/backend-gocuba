@@ -3,7 +3,7 @@ const orderController = require('../controllers/order.controller')
 const auth = require('../middlewares/auth');
 
 // Crear orden
-router.post('/orders', orderController.postOrder)
+router.post('/orders', auth, orderController.postOrder)
 // Obtener ordenes TODAS las ordenes (caso user admin, user Provider)
 router.get('/orders/:idUser?', auth,orderController.getOrders)
 // Obtener una orden especifica por ID de Orden

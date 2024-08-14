@@ -5,6 +5,20 @@ async function postOrder(req, res){
 
     try {
 
+        if(req.user._id !== req.body.user){
+            return res.status(400).send({
+                ok: false,
+                message: "No se puede crear la orden para otro usuario"
+            })
+        } 
+
+        if(req.body.products.length === 0){
+            return res.status(400).send({
+                ok: false,
+                message: "La orden no puede estar vacía"
+            })
+        }
+
         await orderProductPriceVerify(req.body.products, req.body.total);
         const order = new Order(req.body);
 
@@ -41,7 +55,7 @@ async function orderProductPriceVerify(products,total){
             }
         }
 
-        if(!totalOrder !== total){
+        if(totalOrder !== total){
             throw new Error("El total no es correcto")
         }
         
